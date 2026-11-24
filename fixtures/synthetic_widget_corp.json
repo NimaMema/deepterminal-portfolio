@@ -1,0 +1,114 @@
+{
+  "meta": {
+    "case_id": "SYNTHETIC-SWC-2026-10",
+    "company_name": "Synthetic Widget Corp (fictional)",
+    "ticker": "DEMO-SWC",
+    "currency": "USD",
+    "units": "millions (except per-share values)",
+    "analysis_date": "2026-10-28",
+    "synthetic": true,
+    "disclaimer": "SYNTHETIC FIXTURE. Every number in this file is invented for testing and demonstration. It describes no real company and must not be used for any investment decision."
+  },
+  "sources": [
+    {"source_id": "SYN-10K-FY2021", "title": "Synthetic annual report FY2021", "publisher": "DEEPTERMINAL fixtures", "published_at": "2022-02-20", "period_end": "2021-12-31", "synthetic": true},
+    {"source_id": "SYN-10K-FY2022", "title": "Synthetic annual report FY2022", "publisher": "DEEPTERMINAL fixtures", "published_at": "2023-02-19", "period_end": "2022-12-31", "synthetic": true},
+    {"source_id": "SYN-10K-FY2023", "title": "Synthetic annual report FY2023", "publisher": "DEEPTERMINAL fixtures", "published_at": "2024-02-18", "period_end": "2023-12-31", "synthetic": true},
+    {"source_id": "SYN-10K-FY2024", "title": "Synthetic annual report FY2024", "publisher": "DEEPTERMINAL fixtures", "published_at": "2025-02-16", "period_end": "2024-12-31", "synthetic": true},
+    {"source_id": "SYN-10K-FY2025", "title": "Synthetic annual report FY2025", "publisher": "DEEPTERMINAL fixtures", "published_at": "2026-02-15", "period_end": "2025-12-31", "synthetic": true},
+    {"source_id": "SYN-10Q-Q3-2026", "title": "Synthetic quarterly report Q3 2026 (balance sheet)", "publisher": "DEEPTERMINAL fixtures", "published_at": "2026-10-22", "period_end": "2026-09-30", "synthetic": true},
+    {"source_id": "SYN-PRICE", "title": "Synthetic closing price", "publisher": "DEEPTERMINAL fixtures", "published_at": "2026-10-27", "synthetic": true},
+    {"source_id": "SYN-RATES", "title": "Synthetic risk-free rate and equity risk premium", "publisher": "DEEPTERMINAL fixtures", "published_at": "2026-10-01", "synthetic": true},
+    {"source_id": "SYN-TAM", "title": "Synthetic industry market-size estimate", "publisher": "DEEPTERMINAL fixtures", "published_at": "2026-06-30", "synthetic": true},
+    {"source_id": "SYN-PEERS", "title": "Synthetic peer financial summary", "publisher": "DEEPTERMINAL fixtures", "published_at": "2026-10-27", "synthetic": true}
+  ],
+  "market": {
+    "share_price": {"value": 94.00, "unit": "USD/share", "as_of": "2026-10-27", "status": "historical_fact", "source_refs": ["SYN-PRICE"], "quality": "low"}
+  },
+  "capital_structure": {
+    "basic_shares": 400.0,
+    "cash_and_investments": 1500.0,
+    "operating_cash_requirement": 400.0,
+    "non_operating_assets": 0.0,
+    "total_debt": 2100.0,
+    "debt_includes_leases": false,
+    "lease_liabilities": 0.0,
+    "ebit_after_lease_cost": true,
+    "pension_deficit_after_tax": 60.0,
+    "preferred_equity": 0.0,
+    "minority_interest": 150.0,
+    "convertible_face_value": 0.0,
+    "convertible_treatment": "debt",
+    "contingent_liabilities_expected": 0.0,
+    "rsus": 5.0,
+    "options": [{"count": 12.0, "strike": 40.0}],
+    "source_refs": ["SYN-10Q-Q3-2026"]
+  },
+  "history": [
+    {"fiscal_year": 2021, "period_end": "2021-12-31", "filed": "2022-02-20", "source_ref": "SYN-10K-FY2021", "revenue": 8000, "gross_profit": 3200, "operating_income": 1200, "net_income": 880, "operating_cash_flow": 1250, "capex": 400, "depreciation": 320, "stock_based_comp": 120, "accounts_receivable": 1100, "inventory": 900, "total_assets": 9000, "total_debt": 2500, "cash": 900, "shareholders_equity": 4200, "interest_expense": 110, "diluted_shares": 400},
+    {"fiscal_year": 2022, "period_end": "2022-12-31", "filed": "2023-02-19", "source_ref": "SYN-10K-FY2022", "revenue": 8800, "gross_profit": 3520, "operating_income": 1408, "net_income": 1040, "operating_cash_flow": 1400, "capex": 460, "depreciation": 350, "stock_based_comp": 135, "accounts_receivable": 1210, "inventory": 1000, "total_assets": 9700, "total_debt": 2400, "cash": 1000, "shareholders_equity": 4800, "interest_expense": 105, "diluted_shares": 401},
+    {"fiscal_year": 2023, "period_end": "2023-12-31", "filed": "2024-02-18", "source_ref": "SYN-10K-FY2023", "revenue": 9900, "gross_profit": 4010, "operating_income": 1683, "net_income": 1250, "operating_cash_flow": 1600, "capex": 520, "depreciation": 390, "stock_based_comp": 150, "accounts_receivable": 1400, "inventory": 1120, "total_assets": 10500, "total_debt": 2300, "cash": 1150, "shareholders_equity": 5500, "interest_expense": 100, "diluted_shares": 402},
+    {"fiscal_year": 2024, "period_end": "2024-12-31", "filed": "2025-02-16", "source_ref": "SYN-10K-FY2024", "revenue": 10600, "gross_profit": 4240, "operating_income": 1749, "net_income": 1300, "operating_cash_flow": 1700, "capex": 560, "depreciation": 420, "stock_based_comp": 165, "accounts_receivable": 1700, "inventory": 1300, "total_assets": 11300, "total_debt": 2200, "cash": 1300, "shareholders_equity": 6100, "interest_expense": 95, "diluted_shares": 404},
+    {"fiscal_year": 2025, "period_end": "2025-12-31", "filed": "2026-02-15", "source_ref": "SYN-10K-FY2025", "revenue": 11500, "gross_profit": 4600, "operating_income": 2070, "net_income": 1530, "operating_cash_flow": 1950, "capex": 600, "depreciation": 450, "stock_based_comp": 180, "accounts_receivable": 1850, "inventory": 1350, "total_assets": 12100, "total_debt": 2100, "cash": 1500, "shareholders_equity": 6900, "interest_expense": 90, "diluted_shares": 405}
+  ],
+  "profile": {
+    "sector": "industrial components (fictional)",
+    "is_financial_institution": false,
+    "profitable": true,
+    "positive_fcf": true,
+    "cyclical": false,
+    "segments": 1,
+    "high_growth": false,
+    "pays_dividends": false,
+    "years_of_history": 5,
+    "peers_available": 5,
+    "multiple_history_years": 8
+  },
+  "assumptions": {
+    "discount_rate": {"value": 0.085, "unit": "%", "status": "model_assumption", "source_refs": ["SYN-RATES"], "rationale": "CAPM: synthetic risk-free 4.3% + beta 1.05 x ERP 4.5% = 9.0% cost of equity; ~15% debt weight at 5.5% pre-tax, 23% tax; rounded to 8.5% WACC"},
+    "terminal_growth": {"value": 0.03, "unit": "%", "status": "model_assumption", "rationale": "at or below assumed long-run nominal growth of the end markets"},
+    "terminal_roic": {"value": 0.15, "unit": "%", "status": "model_assumption", "rationale": "base case assumes competitive advantage partly persists: ROIC fades from ~19% historical to 15%"},
+    "sales_to_capital": {"value": 2.0, "unit": "x", "status": "model_assumption", "rationale": "close to the historical ratio of revenue added to net reinvestment in FY2021-FY2025 (synthetic)"},
+    "tax_rate": {"value": 0.23, "unit": "%", "status": "model_assumption", "rationale": "synthetic statutory blended rate"}
+  },
+  "scenarios": {
+    "bear": {
+      "narrative": "Demand normalises to low single-digit growth, a new low-cost entrant compresses margins to 15%, and higher financing costs lift WACC to 9%.",
+      "revenue_growth": [0.04, 0.03, 0.03, 0.03, 0.03, 0.025, 0.025],
+      "ebit_margin": [0.165, 0.16, 0.155, 0.15, 0.15, 0.15, 0.15],
+      "tax_rate": 0.23, "discount_rate": 0.09, "terminal_growth": 0.025, "terminal_roic": 0.11, "sales_to_capital": 1.8,
+      "key_dependencies": ["entrant pricing behaviour", "order backlog conversion", "credit spreads"],
+      "source_refs": ["SYN-10K-FY2025", "SYN-RATES"]
+    },
+    "base": {
+      "narrative": "Growth fades from 9% toward the terminal rate; margins edge up to 19% on operating leverage; reinvestment at the historical sales-to-capital ratio.",
+      "revenue_growth": [0.09, 0.085, 0.08, 0.07, 0.06, 0.05, 0.04],
+      "ebit_margin": [0.18, 0.18, 0.185, 0.185, 0.19, 0.19, 0.19],
+      "tax_rate": 0.23, "discount_rate": 0.085, "terminal_growth": 0.03, "terminal_roic": 0.15, "sales_to_capital": 2.0,
+      "key_dependencies": ["capacity expansion completes on schedule", "pricing holds with stable input costs"],
+      "source_refs": ["SYN-10K-FY2025", "SYN-RATES"]
+    },
+    "bull": {
+      "narrative": "Share gains from a superior product line sustain double-digit growth for four years; operating leverage takes margins to 22%.",
+      "revenue_growth": [0.13, 0.12, 0.11, 0.10, 0.09, 0.07, 0.05],
+      "ebit_margin": [0.19, 0.195, 0.20, 0.205, 0.21, 0.215, 0.22],
+      "tax_rate": 0.23, "discount_rate": 0.08, "terminal_growth": 0.03, "terminal_roic": 0.18, "sales_to_capital": 2.3,
+      "key_dependencies": ["product benchmarks hold versus competitors", "no supply constraint on key components"],
+      "source_refs": ["SYN-10K-FY2025", "SYN-TAM"]
+    }
+  },
+  "tam_final_year": {"value": 60000, "unit": "USD millions", "status": "estimate", "source_refs": ["SYN-TAM"], "quality": "low"},
+  "peers": [
+    {"name": "Synthetic Peer A", "ev_ebitda": 9.5,  "revenue_growth": 0.05, "operating_margin": 0.14, "source_ref": "SYN-PEERS"},
+    {"name": "Synthetic Peer B", "ev_ebitda": 11.0, "revenue_growth": 0.07, "operating_margin": 0.16, "source_ref": "SYN-PEERS"},
+    {"name": "Synthetic Peer C", "ev_ebitda": 12.5, "revenue_growth": 0.08, "operating_margin": 0.17, "source_ref": "SYN-PEERS"},
+    {"name": "Synthetic Peer D", "ev_ebitda": 14.0, "revenue_growth": 0.10, "operating_margin": 0.19, "source_ref": "SYN-PEERS"},
+    {"name": "Synthetic Peer E", "ev_ebitda": null, "revenue_growth": 0.02, "operating_margin": -0.03, "source_ref": "SYN-PEERS"}
+  ],
+  "multiple_history": {
+    "EV/EBITDA": [10.5, 11.2, 12.8, 13.5, 12.0, 14.1, 15.0, 13.2]
+  },
+  "evidence_quality": "medium",
+  "normalisation_note": "No material non-recurring items in the synthetic history; margins have risen steadily rather than cyclically, so no cyclical normalisation applied.",
+  "constraints_note": "",
+  "research_findings": []
+}

@@ -1,0 +1,110 @@
+# Deploy the public demo to a free Hugging Face Docker Space, then test the public URL in an
+# unauthenticated browser. Nothing is published until the owner opts in.
+#
+# One-time setup by the owner (no payment details needed):
+#   1. Create a free account at huggingface.co and an access token with "write" scope.
+#   2. Repository → Settings → Secrets and variables → Actions:
+#        secret   HF_TOKEN     = the token
+#        variable HF_SPACE     = <hf-username>/deepterminal
+#        variable DEMO_DEPLOY  = true      (the authorisation switch; delete it to stop deploying)
+#   3. Re-run this workflow's latest run (Actions tab), or push to the branch.
+# Pushes to main deploy only while DEMO_DEPLOY is "true". Manual runs from the Actions
+# tab are also possible once this file is on the default branch.
+name: Deploy public demo
+
+on:
+  push:
+    branches: [main]
+    paths: ["deploy/**", "backend/deepterminal_api/**", "frontend/**", "deepterminal/**", ".github/workflows/deploy-demo.yml"]
+  workflow_dispatch:
+    inputs:
+      smoke_only:
+        description: "Only test the already-deployed public URL"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ vars.DEMO_DEPLOY == 'true' && !inputs.smoke_only }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check configuration
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          test -n "$HF_TOKEN" || { echo "::error::Add the HF_TOKEN repository secret"; exit 1; }
+          [[ "$HF_SPACE" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] || { echo "::error::Set the HF_SPACE variable to <user>/<space>"; exit 1; }
+          test -s deploy/snapshot/deepterminal.dump && test -s deploy/snapshot/cache.tar.gz && test -s deploy/snapshot/showcase.json && test -s deploy/snapshot/responses.json.gz
+      - name: Assemble the Space (tracked files only)
+        run: deploy/assemble.sh space
+      - name: Upload to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          pip install --quiet "huggingface_hub>=0.30,<1"
+          python - <<'EOF'
+          import os
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          space = os.environ["HF_SPACE"]
+          api.create_repo(space, repo_type="space", space_sdk="docker", private=False, exist_ok=True)
+          api.upload_folder(repo_id=space, repo_type="space", folder_path="space",
+                            commit_message=f"Deploy {os.environ['GITHUB_SHA'][:7]}", delete_patterns=["*"])
+          print("uploaded", space)
+          EOF
+
+  smoke:
+    needs: deploy
+    if: ${{ always() && vars.DEMO_DEPLOY == 'true' && (needs.deploy.result == 'success' || inputs.smoke_only) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for the Space to build and run
+        env:
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          for i in $(seq 1 120); do
+            stage=$(curl -s "https://huggingface.co/api/spaces/$HF_SPACE/runtime" | python3 -c "import sys,json;print(json.load(sys.stdin).get('stage',''))" || true)
+            echo "stage: $stage"
+            [ "$stage" = "RUNNING" ] && break
+            case "$stage" in BUILD_ERROR|RUNTIME_ERROR|CONFIG_ERROR) echo "::error::Space $stage"; exit 1;; esac
+            sleep 15
+          done
+          host=$(echo "$HF_SPACE" | tr '[:upper:]' '[:lower:]' | sed 's#/#-#; s#[._]#-#g')
+          echo "DEMO_URL=https://$host.hf.space" >> "$GITHUB_ENV"
+          for i in $(seq 1 40); do
+            code=$(curl -s -m 10 -o /dev/null -w '%{http_code}' "https://$host.hf.space/api/health" || true)
+            echo "health: $code"; [ "$code" = "200" ] && break; sleep 15
+          done
+          [ "$code" = "200" ] || exit 1
+          for i in $(seq 1 80); do
+            curl -s -m 15 "https://$host.hf.space/api/status" | grep -q '"warm":true' && { echo "warm-up done"; exit 0; }
+            echo "warming up…"; sleep 15
+          done
+          echo "::warning::warm-up not finished after 20 minutes; testing anyway"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Test the public URL in a fresh, signed-out browser
+        working-directory: deploy/smoke
+        run: |
+          npm install --no-audit --no-fund playwright@1.63.0
+          npx playwright install --with-deps chromium
+          node smoke.mjs "$DEMO_URL"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: public-demo-screenshots
+          path: deploy/smoke/out

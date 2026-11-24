@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepterminal"
+version = "0.3.0"
+description = "Evidence-first equity research: business quality, intrinsic value and market-implied expectations, kept separate."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []  # the calculation core is deliberately stdlib-only and auditable
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+deepterminal = "deepterminal.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["deepterminal*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

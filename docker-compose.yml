@@ -1,0 +1,45 @@
+# Local stack, all free software: PostgreSQL + API + web UI + Ollama (local AI).
+#   docker compose up --build  →  http://localhost:3000
+#   docker compose exec ollama ollama pull qwen2.5:7b-instruct   # once, ~4.7 GB; optional
+# Without a pulled model the app runs rule-based. No service here needs an account or payment.
+# Defaults to demo mode (synthetic, clearly labelled companies). For real SEC data set
+# DEEPTERMINAL_DATA_MODE=live and DEEPTERMINAL_SEC_USER_AGENT in .env (see .env.example).
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: deepterminal
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-deepterminal}
+      POSTGRES_DB: deepterminal
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U deepterminal"]
+      interval: 3s
+      retries: 20
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    env_file: { path: .env, required: false }
+    environment:
+      DEEPTERMINAL_DATABASE_URL: postgresql+psycopg://deepterminal:${POSTGRES_PASSWORD:-deepterminal}@db:5432/deepterminal
+      DEEPTERMINAL_DATA_MODE: ${DEEPTERMINAL_DATA_MODE:-demo}
+      DEEPTERMINAL_CORS_ORIGINS: http://localhost:3000
+      DEEPTERMINAL_API_TOKEN: ${DEEPTERMINAL_API_TOKEN:-}
+      DEEPTERMINAL_OLLAMA_URL: http://ollama:11434
+      DEEPTERMINAL_ALLOW_PAID_APIS: ${DEEPTERMINAL_ALLOW_PAID_APIS:-false}
+    depends_on: { db: { condition: service_healthy } }
+    volumes: [seccache:/app/backend/.cache]
+    ports: ["127.0.0.1:8000:8000"]
+  web:
+    build: { context: frontend, args: { DEEPTERMINAL_BACKEND_URL: "http://api:8000" } }
+    environment:
+      DEEPTERMINAL_API_TOKEN: ${DEEPTERMINAL_API_TOKEN:-}
+    depends_on: [api]
+    ports: ["127.0.0.1:3000:3000"]
+  ollama:
+    image: ollama/ollama:0.6.8
+    volumes: [ollama:/root/.ollama]
+    ports: ["127.0.0.1:11434:11434"]
+volumes:
+  pgdata:
+  seccache:
+  ollama:

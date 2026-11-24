@@ -1,0 +1,120 @@
+name: tests
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    name: calculation core (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      - run: deepterminal analyze fixtures/synthetic_widget_corp.json --report out/report.md --dashboard out/dashboard.html
+
+  backend:
+    name: API (FastAPI + PostgreSQL)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: deepterminal_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 3s --health-retries 20
+    env:
+      DEEPTERMINAL_TEST_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/deepterminal_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          pip install -e . -e "./backend[dev,pdf,llm]"
+          python -m playwright install --with-deps chromium   # report PDF export test
+      - run: pytest -q backend/tests
+
+  frontend:
+    name: web UI (typecheck, lint, unit tests, build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  e2e:
+    name: end-to-end (Playwright, demo data)
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: deepterminal
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 3s --health-retries 20
+    env:
+      DEEPTERMINAL_DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/deepterminal
+      DEEPTERMINAL_DATA_MODE: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: |
+          pip install -e . -e "./backend[pdf]"
+          python -m playwright install --with-deps chromium   # PDF export
+      - name: Start API
+        working-directory: backend
+        run: |
+          alembic upgrade head
+          nohup uvicorn deepterminal_api.main:app --port 8000 > ../api.log 2>&1 &
+      - name: Build and start web
+        working-directory: frontend
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npm run build
+          nohup npm start > ../web.log 2>&1 &
+          npx --yes wait-on@8.0.3 -t 120000 http-get://127.0.0.1:3000 http-get://127.0.0.1:8000/api/health
+      - run: npx playwright test
+        working-directory: frontend
+      - if: failure()
+        run: tail -n 200 api.log web.log
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: frontend/test-results

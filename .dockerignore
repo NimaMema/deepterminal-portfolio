@@ -1,0 +1,9 @@
+**/node_modules
+**/.next
+**/__pycache__
+**/.cache
+**/.pytest_cache
+frontend
+out
+*.egg-info
+.env

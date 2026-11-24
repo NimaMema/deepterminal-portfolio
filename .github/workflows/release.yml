@@ -1,0 +1,44 @@
+# Publish a release only after both complete suites pass for the same main commit.
+# This creates a tag/release inside the existing private repository; it does not deploy.
+name: Private release
+on:
+  workflow_run:
+    workflows: [tests, Demo image]
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: private-release-v0.3.0
+  cancel-in-progress: false
+jobs:
+  release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner, repo} = context.repo;
+            const sha = context.payload.workflow_run.head_sha;
+            const repository = await github.rest.repos.get({owner, repo});
+            if (!repository.data.private) throw new Error('This release is authorized for the private repository only');
+            const head = await github.rest.repos.getBranch({owner, repo, branch: 'main'});
+            if (head.data.commit.sha !== sha) { core.info('main moved; wait for its checks'); return; }
+            const {data} = await github.rest.actions.listWorkflowRunsForRepo({owner, repo, branch: 'main', head_sha: sha, event: 'push', per_page: 100});
+            const passed = ['tests', 'Demo image'].every(name => {
+              const runs = data.workflow_runs.filter(r => r.name === name).sort((a,b) => b.id-a.id);
+              return runs[0]?.conclusion === 'success';
+            });
+            if (!passed) { core.info('Waiting for both test and image checks on this commit'); return; }
+            try {
+              await github.rest.repos.getReleaseByTag({owner, repo, tag: 'v0.3.0'});
+              core.info('v0.3.0 already exists; leave its tag unchanged'); return;
+            } catch (error) { if (error.status !== 404) throw error; }
+            const result = await github.rest.repos.createRelease({
+              owner, repo, tag_name: 'v0.3.0', target_commitish: sha,
+              name: 'DEEPTERMINAL v0.3.0', draft: false, prerelease: false,
+              body: 'Private single-user research terminal and reproducible offline demo. Includes genuine SEC data/price replay, citation safeguards, deterministic valuation and reverse DCF, reports and PDF export.\n\nCalculation, API, frontend, browser E2E, Docker demo and non-root PDF checks passed for this commit. See docs/RELEASE_NOTES.md and docs/STATUS.md for scope and limitations. Historical insider prices are not current quotes; AI interpretations remain experimental. No public hosting or paid service is enabled.'
+            });
+            core.info(result.data.html_url);

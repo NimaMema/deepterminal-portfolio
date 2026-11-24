@@ -1,0 +1,14 @@
+{
+  "_comment": "Real-company verification run (`deepterminal verify examples/verification_manifest.json`). Three non-financial US-GAAP filers from different industries. PRICES ARE DELIBERATELY EMPTY: fill each with a closing price you observed, its date and its source. DEEPTERMINAL never invents prices. Discount rates below are illustrative model assumptions; replace them with your own WACC estimates.",
+  "companies": [
+    {"company": "AAPL", "_industry": "technology hardware (FYE September)",
+     "price": {"value": null, "as_of": null, "source": null},
+     "settings": {"discount_rate": 0.085, "discount_rate_rationale": "illustrative placeholder; replace with your WACC estimate"}},
+    {"company": "KO", "_industry": "consumer staples / beverages",
+     "price": {"value": null, "as_of": null, "source": null},
+     "settings": {"discount_rate": 0.07, "discount_rate_rationale": "illustrative placeholder; replace with your WACC estimate"}},
+    {"company": "CAT", "_industry": "cyclical industrial machinery",
+     "price": {"value": null, "as_of": null, "source": null},
+     "settings": {"discount_rate": 0.09, "discount_rate_rationale": "illustrative placeholder; replace with your WACC estimate. Cyclical: consider a through-cycle base_margin"}}
+  ]
+}

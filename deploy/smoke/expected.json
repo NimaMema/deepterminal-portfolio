@@ -1,0 +1,69 @@
+{
+  "valuations": [
+    {
+      "company_id": 4,
+      "ticker": "AMD",
+      "request": {
+        "settings": {
+          "discount_rate": 0.09
+        },
+        "as_of": "2026-10-15"
+      },
+      "base_per_share": 57.637751390475195,
+      "implied_growth": null,
+      "verdict": "Potentially overvalued under specified assumptions"
+    },
+    {
+      "company_id": 2,
+      "ticker": "AAPL",
+      "request": {
+        "settings": {
+          "discount_rate": 0.09
+        },
+        "as_of": "2026-10-20"
+      },
+      "base_per_share": 118.27515796664056,
+      "implied_growth": 0.3982361289020627,
+      "verdict": "Potentially overvalued under specified assumptions"
+    },
+    {
+      "company_id": 5,
+      "ticker": "INTC",
+      "request": {
+        "settings": {
+          "discount_rate": 0.09
+        },
+        "as_of": "2026-08-11"
+      },
+      "base_per_share": 0.0,
+      "implied_growth": null,
+      "verdict": "Too uncertain to assess reliably"
+    },
+    {
+      "company_id": 3,
+      "ticker": "MSFT",
+      "request": {
+        "settings": {
+          "discount_rate": 0.09
+        },
+        "as_of": "2026-10-13"
+      },
+      "base_per_share": 279.04950067866,
+      "implied_growth": 0.4134070218261332,
+      "verdict": "Potentially overvalued under specified assumptions"
+    },
+    {
+      "company_id": 1,
+      "ticker": "NVDA",
+      "request": {
+        "settings": {
+          "discount_rate": 0.09
+        },
+        "as_of": "2026-09-21"
+      },
+      "base_per_share": 252.22407724014556,
+      "implied_growth": 0.3503097724821419,
+      "verdict": "Approximately fairly valued under specified assumptions"
+    }
+  ]
+}

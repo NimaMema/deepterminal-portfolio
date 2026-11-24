@@ -1,0 +1,50 @@
+{
+  "NVDA": {
+    "value": 222.8014639494419,
+    "as_of": "2026-09-21",
+    "source": "SEC Form 4 open-market trades on 2026-09-21: volume-weighted 222.80 across 3 trade(s) (Teter Timothy S.); insider-reported transaction price, not an official close",
+    "url": "https://www.sec.gov/Archives/edgar/data/1045810/000169684126000014/xslF345X06/wk-form4_1790196985.xml",
+    "analysis_date": "2026-10-30",
+    "settings": {
+      "discount_rate": 0.09
+    },
+    "recording": {
+      "repository_commit": "c566a05da86d807dfcbde6d72d00f6c3c00fda37",
+      "path": "deploy/snapshot/responses.json.gz",
+      "endpoint": "/api/companies/1/prices?",
+      "note": "Archived insider transaction prices, not closing prices. Discount rate is an illustrative test assumption."
+    }
+  },
+  "AAPL": {
+    "value": 339.62,
+    "as_of": "2026-10-20",
+    "source": "SEC Form 4 open-market trades on 2026-10-20: volume-weighted 339.62 across 1 trade(s) (Newstead Jennifer); insider-reported transaction price, not an official close",
+    "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126040540/xslF345X06/form4.xml",
+    "analysis_date": "2026-10-30",
+    "settings": {
+      "discount_rate": 0.09
+    },
+    "recording": {
+      "repository_commit": "c566a05da86d807dfcbde6d72d00f6c3c00fda37",
+      "path": "deploy/snapshot/responses.json.gz",
+      "endpoint": "/api/companies/2/prices?",
+      "note": "Archived insider transaction prices, not closing prices. Discount rate is an illustrative test assumption."
+    }
+  },
+  "MSFT": {
+    "value": 545.4213542094456,
+    "as_of": "2026-10-13",
+    "source": "SEC Form 4 open-market trades on 2026-10-13: volume-weighted 545.42 across 3 trade(s) (Hood Amy); insider-reported transaction price, not an official close",
+    "url": "https://www.sec.gov/Archives/edgar/data/789019/000078901926000226/xslF345X06/form4.xml",
+    "analysis_date": "2026-10-30",
+    "settings": {
+      "discount_rate": 0.09
+    },
+    "recording": {
+      "repository_commit": "c566a05da86d807dfcbde6d72d00f6c3c00fda37",
+      "path": "deploy/snapshot/responses.json.gz",
+      "endpoint": "/api/companies/3/prices?",
+      "note": "Archived insider transaction prices, not closing prices. Discount rate is an illustrative test assumption."
+    }
+  }
+}

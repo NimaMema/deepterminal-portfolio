@@ -1,0 +1,20 @@
+{
+  "_comment": "Valuation settings for `deepterminal value --settings`. Every value here is a MODEL ASSUMPTION you choose. Omitted optional keys are derived mechanically from the company's own SEC history (rule shown in the report). discount_rate has no default.",
+  "discount_rate": 0.085,
+  "discount_rate_rationale": "Explain your WACC build-up, e.g. CAPM: risk-free X% (source, date) + beta Y x ERP Z% (source); after-tax cost of debt; market-value weights",
+  "terminal_growth": 0.025,
+  "terminal_roic": null,
+  "forecast_years": 7,
+  "basis": "ttm",
+  "base_growth": null,
+  "base_margin": null,
+  "tax_rate": null,
+  "net_capex_pct_revenue": null,
+  "nwc_pct_revenue_change": null,
+  "bear": {"growth": -0.04, "margin": -0.03, "discount_rate": 0.01, "terminal_growth": -0.005},
+  "bull": {"growth": 0.03, "margin": 0.02, "discount_rate": -0.005},
+  "operating_cash_pct_revenue": 0.0,
+  "include_noncurrent_securities": true,
+  "evidence_quality": "medium",
+  "rationales": {}
+}

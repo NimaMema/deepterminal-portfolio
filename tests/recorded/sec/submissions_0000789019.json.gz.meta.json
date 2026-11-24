@@ -1,0 +1,9 @@
+{
+  "url": "https://data.sec.gov/submissions/CIK0000789019.json",
+  "retrieved_at": "2026-10-29T17:25:09.490126+00:00",
+  "status": 200,
+  "content_type": "application/json",
+  "sha256": "a131887af6980d40200f02d34c0b447fcdd654afdf060e7ae1090becbcc6feab",
+  "bytes": 185279,
+  "note": "sha256 is of the decoded response body exactly as served"
+}
