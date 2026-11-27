@@ -1,5 +1,6 @@
 # Local stack, all free software: PostgreSQL + API + web UI + Ollama (local AI).
-#   docker compose up --build  →  http://localhost:3000
+#   docker compose up --build --wait db api web  →  http://localhost:3000
+#   docker compose up -d ollama  # optional
 #   docker compose exec ollama ollama pull qwen2.5:7b-instruct   # once, ~4.7 GB; optional
 # Without a pulled model the app runs rule-based. No service here needs an account or payment.
 # Defaults to demo mode (synthetic, clearly labelled companies). For real SEC data set
@@ -35,6 +36,15 @@ services:
       DEEPTERMINAL_API_TOKEN: ${DEEPTERMINAL_API_TOKEN:-}
     depends_on: [api]
     ports: ["127.0.0.1:3000:3000"]
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(response => { if (!response.ok) process.exitCode = 1 }).catch(() => { process.exitCode = 1 })"
+      interval: 3s
+      timeout: 5s
+      retries: 20
   ollama:
     image: ollama/ollama:0.6.8
     volumes: [ollama:/root/.ollama]

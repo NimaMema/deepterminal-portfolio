@@ -11,6 +11,7 @@ COPY backend/pyproject.toml ./backend/
 COPY backend/deepterminal_api ./backend/deepterminal_api
 COPY backend/alembic ./backend/alembic
 COPY backend/alembic.ini ./backend/
+COPY scripts/seed_demo.py ./scripts/seed_demo.py
 # PDF export uses Playwright's Chromium (optional; ~400 MB). Set INSTALL_PDF=0 to skip.
 ARG INSTALL_PDF=1
 # Paid AI SDKs are not installed by default (zero-cost); local AI uses Ollama over plain HTTP.

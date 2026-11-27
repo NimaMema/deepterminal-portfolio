@@ -1,11 +1,7 @@
-# Phase 1 — real-data integration & verification report
+# Phase 1 — SEC data integration and verification
 
-*Prepared 2026-10-29 for branch `claude/zen-ptolemy-pmdajt`.*
-
-**Bottom line:** the SEC EDGAR data path is implemented end to end and tested offline. **No real
-company has been valued yet**, because this cloud environment's network policy blocks every SEC
-host. Nothing was fabricated to fill that gap. Completing the run takes one settings change and
-three commands (see [§6](#6-how-to-complete-the-real-company-run)).
+*Historical verification report, 2026-10-29.* This phase verified the SEC pipeline with synthetic
+fixtures. See [project status](STATUS.md) for later verification with genuine filings.
 
 ## 1. Repository inspection — what was actually implemented before this phase
 
@@ -19,34 +15,11 @@ three commands (see [§6](#6-how-to-complete-the-real-company-run)).
 | Report / dashboard / CLI / schema | Implemented for case files | `reporting/`, `cli.py`, `schema/` |
 | Research modules & agents | Designed only | docs |
 
-The original master specification is not in the repository (only `README.md` existed at the
-initial commit, and `main` has no other commits). See [SPEC_RECONCILIATION.md](SPEC_RECONCILIATION.md).
+## 2. Live SEC access
 
-## 2. Why this environment cannot reach SEC EDGAR
-
-These are the observations, recorded with the proxy's own diagnostics:
-
-| Host | Result |
-|---|---|
-| `data.sec.gov:443` | `connect_rejected`: gateway answered **403 to CONNECT** |
-| `www.sec.gov:443` | same |
-| `efts.sec.gov:443` | same |
-| `pypi.org` | allowed (packages install normally) |
-
-- **Who refused.** The session's **egress proxy** refused the connection, before any HTTP request
-  reached the SEC. The SEC itself did not refuse anything; no User-Agent or rate-limit problem is
-  involved.
-- **Why.** The environment runs under a network-access policy whose allow-list does not include
-  `sec.gov` hosts. (The request mentioned a "Codex Cloud environment"; this session runs in a
-  Claude Code cloud environment, and the same principle applies.)
-- **What was not done.** No attempt was made to bypass the restriction: no alternative proxies,
-  and no third-party mirrors of SEC data. The connector classifies this case as
-  `NetworkPolicyBlocked` and does **not** retry it.
-- **How to fix it.** In the cloud environment's settings (environment menu → Edit → *Network
-  access*), either choose a broader access level or add `sec.gov` (or `www.sec.gov` and
-  `data.sec.gov`) under *Allowed domains*, keeping *Allow package managers* ticked. Docs:
-  https://code.claude.com/docs/en/cloud-environments#network-access. Alternatively, run the
-  commands below on any machine with ordinary internet access.
+The Phase 1 test network blocked outbound connections to EDGAR, so live fetches were deferred.
+The client reports this as `NetworkPolicyBlocked`. Live verification requires a network that
+can reach the SEC hosts and a contact address in the User-Agent.
 
 **SEC fair-access requirements** (https://www.sec.gov/os/accessing-edgar-data) and how the
 connector meets them:
@@ -155,7 +128,7 @@ Acceptance for closing A17 (ROADMAP):
 - the provenance CSV for each company is spot-checked against the filing pages for at least
   revenue, operating income, OCF, capex, cash, debt and shares.
 
-## 7. Known limitations (current)
+## 7. Phase 1 limitations
 
 - **Data and parsing**
   - Only US-GAAP, USD filers are supported. Financial institutions are refused because the

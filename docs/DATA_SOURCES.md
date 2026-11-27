@@ -47,8 +47,9 @@
 | Court records | PACER (per-page fees); CourtListener / RECAP (free subset) |
 | Earnings-call transcripts | Usually licensed; company IR pages sometimes host them |
 
-## Claude API
-Agents use the Claude API (Anthropic). Requirements:
+## Optional hosted model providers
+Anthropic and OpenAI are optional providers. Hosted providers require explicit opt-in and an API key.
+Apply these requirements when enabling a hosted provider.
 - API key held in a secret manager.
 - Data sent to the API must be permitted by the source licences. Some vendor licences forbid
   sending their data to third-party processors, so check before routing licensed content through

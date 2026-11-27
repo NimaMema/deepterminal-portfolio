@@ -1,22 +1,12 @@
 # DEEPTERMINAL — Master Specification (v2)
 
-> **Status of this document.** This is the consolidated master specification. It merges the
-> original DEEPTERMINAL module set (corporate legitimacy, management investigation, SEC filings,
-> forensic accounting, supply-chain research, customer intelligence, AI agents, source
-> verification, security, GitHub documentation, LinkedIn presentation) with the *Advanced
-> Investment Intelligence, Intrinsic Valuation & Market Expectations* expansion.
->
-> The original specification text was not committed to this repository. Items to reconcile
-> once it is found are listed in [SPEC_RECONCILIATION.md](SPEC_RECONCILIATION.md). Its modules are
-> therefore **reconstructed here from their names and stated intent**. Nothing has been removed
-> or weakened. If you hold the original text, merge any extra detail into §A–§K. The expansion
-> takes precedence only where it adds requirements.
+This document describes the research and valuation design. See [project status](STATUS.md)
+for current feature coverage and verification.
 
 Companion documents:
 [Architecture](ARCHITECTURE.md) · [Data model & evidence schema](DATA_MODEL.md) ·
 [Research agents](AGENTS.md) · [Valuation methods](VALUATION_METHODS.md) ·
-[Roadmap & acceptance criteria](ROADMAP.md) · [Data sources & licensing](DATA_SOURCES.md) ·
-[Presentation](PRESENTATION.md)
+[Roadmap & acceptance criteria](ROADMAP.md) · [Data sources & licensing](DATA_SOURCES.md)
 
 ---
 
@@ -89,7 +79,7 @@ Covers reviews, complaints, retention signals and customer concentration disclos
 in §6 to Customer & Demand Intelligence.*
 
 ### G. AI research agents
-A Claude-powered multi-agent research system with planning, tool use and synthesis. See
+A research system with optional language models with planning, tool use and synthesis. See
 [AGENTS.md](AGENTS.md). Extended with the Valuation Analyst, Expectations Analyst, Competitive
 Intelligence, Demand, Supply-Chain Economics, Narrative, Analogue and **Thesis Challenger**
 agents.
@@ -110,16 +100,6 @@ provides the epistemic statuses, look-ahead guard, staleness checks and citation
 - Dependencies are pinned and scanned. The calculation core has zero third-party dependencies.
 - Personal data is minimised: reviewers and social users are never profiled individually, and
   aggregation happens before storage.
-
-### J. GitHub documentation
-The repository is portfolio-grade: README with quick start, architecture diagram, methodology
-docs, tests in CI, a changelog, contribution notes, a clear licence and labelled synthetic
-fixtures.
-
-### K. LinkedIn presentation
-Covers a project narrative, screenshots of the Market Expectations dashboard, a short write-up of
-the methodology (business quality vs. value vs. expectations) and an honest statement of
-limitations. See [PRESENTATION.md](PRESENTATION.md).
 
 ---
 
@@ -420,10 +400,9 @@ assessed* explicitly.
   the period it covers and the retrieval time. A look-ahead guard rejects later evidence
   (`enforce_point_in_time`). Staleness is checked, filing and restatement history is preserved,
   and as-of dates appear on every price.
-- **Division of labour**: deterministic functions do all calculations. Claude plans research,
-  interprets documents, synthesises evidence, finds contradictions, explains scenarios, generates
-  hypotheses and drafts reports. Claude **never invents missing financial data**; gaps are
-  reported as limitations.
+- **Division of labour**: deterministic functions do all calculations. Language models can
+  help plan research, interpret documents, synthesise evidence, find contradictions, explain scenarios,
+  and draft reports. Missing financial data is reported as a limitation.
 
 ### 16. Implementation priorities
 These are in [ROADMAP.md](ROADMAP.md): Early MVP (done in v0.1), then Intermediate, then

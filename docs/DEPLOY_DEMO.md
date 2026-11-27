@@ -1,15 +1,13 @@
-# Public hackathon demo: status and deployment
+# Public demo deployment
 
-**Not deployed yet.** Deploying needs the owner's authorisation and a free Hugging Face token (steps
-below). The GitHub repository stays private. Deploying publishes the demo app's source and data
-snapshot in a public Hugging Face Space.
+This guide describes how the maintainer can publish the demo app and its data snapshot in a
+Hugging Face Space. See the [quick start](../README.md#quick-start) to run DeepTerminal locally.
 
 ## Hosting
 
 - **Host:** Hugging Face Docker Space, free "CPU basic" tier (2 vCPU, 16 GB).
 - **Cost and access:** no payment details are needed, and judges need no account.
 - **Sleep:** the Space sleeps after 48 h without visitors and wakes on the next visit, which takes about a minute.
-- **Why it deploys from GitHub Actions:** this sandbox cannot reach huggingface.co or any other free host, so a workflow does the deployment.
 
 ## How the demo works
 
@@ -79,7 +77,7 @@ These are free and need no payment details. Do not paste the token into chat.
    - **Secrets → New repository secret:** `HF_TOKEN` = the token.
    - **Variables → New repository variable:** `HF_SPACE` = `<your-hf-username>/deepterminal`.
    - **Variables → New repository variable:** `DEMO_DEPLOY` = `true`. This is the authorisation switch; delete it to stop deploying.
-4. Open **Actions → Deploy public demo**, select the latest run and choose **Re-run all jobs**, or ask Claude to push.
+4. Open **Actions → Deploy public demo**, select the latest run and choose **Re-run all jobs**.
 5. The workflow then:
    - uploads the Space;
    - waits for it to build and warm up;

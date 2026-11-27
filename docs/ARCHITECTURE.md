@@ -42,7 +42,7 @@ flowchart LR
     EXP[Expectations gap &\nmisvaluation verdict]
     CIT[Citation audit &\nlook-ahead guard]
   end
-  subgraph Agents["Research agents (Claude)"]
+  subgraph Agents["Research agents"]
     PLAN[Planner]
     SPEC[Specialists\nfilings · forensic · competitive\ndemand · supply chain · narrative\nanalogue · management]
     CHAL[Thesis Challenger]
@@ -98,7 +98,7 @@ flowchart LR
 
 ## Deterministic / LLM boundary
 
-| Claude may | Claude may not |
+| Model capabilities | Model restrictions |
 |---|---|
 | Plan research and choose tools | Produce any number that enters a calculation without a source |
 | Extract values from documents **with locator + quote** (then verified mechanically) | Fill missing financial data |
@@ -124,4 +124,5 @@ flowchart LR
 - FastAPI serves the core over HTTP. A React front-end hosts the Valuation Laboratory (live
   recompute through the API, so there is no client-side maths duplication).
 - A worker queue runs ingestion and agent jobs, with scheduling for filings and price refresh.
-- The Claude API provides agents, with tool use and prompt caching for long filings.
+- Research uses rule-based analysis or optional Ollama models by default. Hosted model providers
+  require explicit opt-in.

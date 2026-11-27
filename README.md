@@ -4,7 +4,7 @@
 
 [![Tests](https://github.com/NimaMema/deepterminal-portfolio/actions/workflows/tests.yml/badge.svg)](https://github.com/NimaMema/deepterminal-portfolio/actions/workflows/tests.yml)
 [![Docker demo](https://github.com/NimaMema/deepterminal-portfolio/actions/workflows/demo-image.yml/badge.svg)](https://github.com/NimaMema/deepterminal-portfolio/actions/workflows/demo-image.yml)
-[Release v0.3.0](https://github.com/NimaMema/deepterminal-portfolio/releases/tag/v0.3.0) · [Quick start](#quick-start) · [Architecture](#architecture) · [Verification](#testing) · [Scope and limitations](docs/STATUS.md)
+[Release notes](docs/RELEASE_NOTES.md) · [Quick start](#quick-start) · [Architecture](#architecture) · [Verification](#testing) · [Scope and limitations](docs/STATUS.md)
 
 DEEPTERMINAL brings SEC filings, financial statements, company research and valuation into one
 research terminal. It separates three questions: **is this a good business, what is it plausibly
@@ -13,6 +13,45 @@ worth, and what does the observed share price already assume?**
 The calculation engine handles the financial maths. The optional local AI layer helps explore
 evidence and draft research, with citation and numeric checks. Assumptions, source dates and
 missing data remain visible.
+
+## Quick start
+
+1. **Install and open Docker.** Use Docker Desktop for [Windows](https://docs.docker.com/desktop/setup/install/windows-install/) or [macOS](https://docs.docker.com/desktop/setup/install/mac-install/). On Linux, use [Docker Engine with the Compose plugin](https://docs.docker.com/compose/install/linux/).
+   - Windows on Intel or AMD: choose **x86_64 / AMD64**. Windows on ARM: choose **Arm64**.
+   - Mac with an M-series chip: choose **Apple silicon**. For an Intel Mac, choose **Intel chip**.
+2. **[Download the ZIP](https://github.com/NimaMema/deepterminal-portfolio/archive/refs/heads/main.zip)** and extract it. On GitHub you can also choose **Code → Download ZIP**.
+3. **Open a terminal in the extracted folder** containing `docker-compose.yml`. On Windows, open the folder in File Explorer, type `powershell` in the address bar, and press Enter. On macOS, open Terminal, type `cd ` (with a space), drag the extracted folder into the window, and press Return. On Linux, open a terminal from the extracted folder or use `cd` with its path.
+4. **Start the demo** by running this command. The first launch downloads and builds the containers, which can take several minutes.
+
+   ```sh
+   docker compose up --build --wait db api web
+   ```
+
+5. **Open [localhost:3000](http://localhost:3000)** and search for **DQD** to explore Demo Quantum Devices. The demo uses fictional companies and needs no Git, Python, Node.js, API keys, or local AI model on your computer.
+
+### Try a valuation
+
+Load sample share prices from the same terminal.
+
+```sh
+docker compose exec api python /app/scripts/seed_demo.py --no-jobs
+```
+
+Open **DQD → Valuation laboratory**, enter `0.09` as an example discount rate (9%), and click **Run valuation**.
+
+To stop DeepTerminal while keeping your data, run `docker compose down` in the project folder. To start it again, run the command in step 4.
+
+### Troubleshooting
+
+| What you see | What to do |
+|---|---|
+| `docker` is not recognized or the command is missing | Install Docker, reopen your terminal, and run `docker compose version`. |
+| Docker cannot connect to the engine | Open Docker Desktop and wait for it to finish starting. On Linux, start the Docker service. |
+| Compose cannot find a configuration file | Open your terminal inside the extracted folder containing `docker-compose.yml`. |
+| Port 3000 or 8000 is already in use | Close the app using that port and rerun the startup command. |
+| A container fails to start | Run `docker compose logs --tail=80 api web db` to see the startup error. |
+
+To run with live SEC data, use the [development setup](#local-development). For optional local AI in Docker, run `docker compose up -d ollama`, then `docker compose exec ollama ollama pull qwen2.5:7b-instruct` (about 4.7 GB).
 
 ![NVIDIA research overview using recorded SEC data](docs/screenshots/live-01-nvda-overview.png)
 
@@ -51,6 +90,7 @@ Local-model prose remains experimental; a valid citation alone does not establis
 - [Principles](#principles)
 - [Architecture](#architecture)
 - [Quick start](#quick-start)
+- [Local development](#local-development)
 - [Demo scenarios](#demo-scenarios)
 - [Configuration](#configuration)
 - [Testing](#testing)
@@ -152,21 +192,7 @@ flowchart TD
 More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md),
 [docs/DATA_MODEL.md](docs/DATA_MODEL.md) and [docs/AGENTS.md](docs/AGENTS.md).
 
-## Quick start
-
-### Option 1: Docker (demo mode)
-
-```bash
-docker compose up --build
-```
-
-Then open http://localhost:3000 and seed the demo companies, prices and investigations:
-
-```bash
-python scripts/seed_demo.py
-```
-
-### Option 2: Local development
+## Local development
 
 Requirements: Python 3.11+, Node 22, PostgreSQL 16.
 
@@ -230,7 +256,7 @@ deepterminal analyze fixtures/synthetic_widget_corp.json --report out/report.md 
 
 ## Demo scenarios
 
-After `seed_demo.py`, each fictional company exercises a different path. All of it is synthetic.
+Each fictional company exercises a different workflow. Use [the sample-price command](#try-a-valuation) to explore valuation and reverse DCF.
 
 | Company | What to look at |
 |---|---|
@@ -380,5 +406,5 @@ recommendations.
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) · [DATA_MODEL.md](docs/DATA_MODEL.md) · [AGENTS.md](docs/AGENTS.md) | Design |
 | [VALUATION_METHODS.md](docs/VALUATION_METHODS.md) | Formulas, limitations, verification |
 | [DATA_SOURCES.md](docs/DATA_SOURCES.md) | Sources, licensing, access |
-| [PHASE1_VERIFICATION.md](docs/PHASE1_VERIFICATION.md) · [SPEC_RECONCILIATION.md](docs/SPEC_RECONCILIATION.md) | Real-data pipeline verification |
+| [PHASE1_VERIFICATION.md](docs/PHASE1_VERIFICATION.md) | Real-data pipeline verification |
 | [RELEASE_NOTES.md](docs/RELEASE_NOTES.md) | v0.3.0 release notes |

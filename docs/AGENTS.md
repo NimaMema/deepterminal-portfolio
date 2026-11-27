@@ -1,6 +1,7 @@
 # Research-agent design (extended)
 
-Agents are Claude-powered workers that **find, read and classify evidence**. They never compute
+Research agents **find, read and classify evidence**. The app supports rule-based research and
+optional model-assisted research. They never compute
 valuation numbers and never fill data gaps. Every agent output is a set of *claims with
 citations* that must pass the Citation Verifier before reaching the evidence store.
 
